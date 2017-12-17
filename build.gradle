@@ -1,0 +1,39 @@
+plugins {
+	id 'java'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	testCompile 'org.testng:testng:6.11'
+}
+
+processResources {
+	def env = System.getenv('ENV')
+	env = (env) ? env + '.' : ''
+	eachFile { fcd ->
+		if (fcd.getSourceName().matches('main.*properties')) {
+			if (fcd.getSourceName() == "main.${env}" + "properties") {
+				fcd.setName('main.properties')
+			} else {
+				fcd.exclude()
+			}
+		}
+	}
+}
+
+test {
+	useTestNG()
+	testLogging.showStandardStreams = true
+	testLogging {
+		events "passed", "skipped", "failed"
+		exceptionFormat "full"
+	}
+}
+
+task run(type: JavaExec) {
+	classpath = sourceSets.main.runtimeClasspath
+	main = 'Main'
+}
