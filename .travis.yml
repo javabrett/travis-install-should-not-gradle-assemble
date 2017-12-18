@@ -7,6 +7,9 @@ env:
   - ENVIRONMENT=dev
   - ENVIRONMENT=prod
 
+install:
+  - true
+
 before_script:
   - export ENV=$ENVIRONMENT && echo ENV:$ENV
 
